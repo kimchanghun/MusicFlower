@@ -1,0 +1,8 @@
+(경표??)
+Easing Functions Cheat Sheet
+
+https://easings.net/ko
+
+**웹 페이지에서 무빙 미리보기
+   기능이 있어 단순히 이미지만
+   보지 말것
