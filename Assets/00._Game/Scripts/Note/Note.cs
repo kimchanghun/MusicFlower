@@ -51,6 +51,14 @@ namespace MF.Game
                 .OnComplete(() => DestroyNote());
         }
 
+        public void SetDifficult(float difficult)
+        {
+            if(difficult >= 0f)
+            {
+                DurationToDestination = DurationToDestination / difficult;
+            }            
+        }
+
         // Update is called once per frame
         void Update()
         {

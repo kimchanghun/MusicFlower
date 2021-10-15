@@ -22,7 +22,7 @@ namespace MF.Game
                 
                 return instance;
             }            
-        } 
+        }
         */
 
         [SerializeField]

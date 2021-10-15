@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 8
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfd15184a6b8a6f47a37925a9b492b51, type: 3}
+  m_Name: GameData
+  m_EditorClassIdentifier: 
+  Entities:
+  - id: 1
+    difficult: 1
+    term: 0.5
+    condition_1: 10
+    condition_2: 9
+    note_00: A
+    note_01: B
+    note_02: C
+    note_03: AB
+    note_04: BC
+    note_05: AC
+    note_06: ABC
+    note_07: '-'
+    note_08: A
+    note_09: B
+    note_10: C
+    note_11: AB
+    note_12: BC
+    note_13: AC
+    note_14: ABC
+    note_15: '-'
+    note_16: A
+    note_17: B
+    note_18: C
+    note_19: AB
+    note_20: BC
+    note_21: AC
+    note_22: ABC
+    note_23: '-'
+    note_24: A
+    note_25: B
+    note_26: C
+    note_27: AB
+    note_28: BC
+    note_29: AC
+    note_30: ABC
+    note_31: '-'
+    note_32: A
+    note_33: B
+    note_34: C
+    note_35: AB
+    note_36: BC
+    note_37: AC
+    note_38: ABC
+    note_39: '-'

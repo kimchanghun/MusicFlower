@@ -12,31 +12,14 @@ namespace MF.Game
         GameProperties gameProperties;
         public GameProperties Properties => gameProperties;
 
+        [SerializeField]
+        GameData gameData;
+        public GameData Data => gameData;
+
         // Start is called before the first frame update
         void Start()
         {
             
         }
-
-        // Update is called once per frame
-        void Update()
-        {
-            Test();
-        }
-
-        [SerializeField]
-        GameObject notePrefab;
-
-        void Test()
-        {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                GameObject g = Instantiate(notePrefab);
-
-                Note note = g.GetComponent<Note>();
-                note.NoteType = (NoteTypes)Random.Range(1, 8);
-            }
-        }
     }
-
 }
