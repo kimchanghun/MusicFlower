@@ -16,12 +16,45 @@ namespace MF.Game
         [SerializeField]
         GameObject notePrefab;
 
+        Note currentNote = null;
+        Queue<Note> noteQueue = new Queue<Note>();
+
         private void Start()
         {
             //Excel데이터를 가져옴
             selectedEntity = GameManager.Instance.Data.SelectRandomOne();
 
             StartCoroutine(NoteSequence());
+
+            //인풋 이벤트 구독
+            InputManager.Instance.inputEvent.AddListener(InputHandler);
+        }
+
+        void InputHandler(NoteTypes noteTypes)
+        {
+            Debug.Log("Key입력 : " + noteTypes);
+
+            if(currentNote != null)
+            {
+                if (currentNote.Age >= 1.9f && currentNote.Age <= 2.1f)
+                {
+                    if (currentNote.NoteType == noteTypes)
+                    {
+                        Debug.Log($"성공!!! 키입력 {noteTypes} 노트 {currentNote.NoteType}");
+                    }
+                    else
+                    {
+                        Debug.Log($"실패!!! 키입력 {noteTypes} 노트 {currentNote.NoteType}");
+                    }
+                }
+                else
+                {
+                    Debug.Log("실패!!! 시간 안맞음");
+                }
+
+                currentNote.DestroyNote();
+            }
+
         }
 
         // 동기 함수, 비동기 함수
@@ -41,7 +74,10 @@ namespace MF.Game
             {
                 NoteTypes noteType = NoteTypeHelper.StringToNoteType(item);
                 
-                CreateNote(noteType);
+                if(noteType != NoteTypes.None)
+                {
+                    CreateNote(noteType);
+                }               
 
                 yield return new WaitForSeconds(selectedEntity.term);
             }            
@@ -56,6 +92,27 @@ namespace MF.Game
             note.NoteType = noteType;
 
             note.SetDifficult(selectedEntity.difficult);
+
+            noteQueue.Enqueue(note); 
+            if(currentNote == null)
+            {
+                currentNote = noteQueue.Dequeue();
+                //Debug.Log("CurrentNote : " + currentNote?.NoteType ?? "null");
+            }
+        }
+
+        public void DeathNote(Note note)
+        {
+            if(noteQueue.Count > 0)
+            {
+                currentNote = noteQueue.Dequeue();
+                //Debug.Log("CurrentNote : " + currentNote?.NoteType ?? "null");
+            }
+            else
+            {
+                currentNote = null;
+                //Debug.Log("CurrentNote : " + currentNote?.NoteType ?? "null");
+            }            
         }
     } 
 }
