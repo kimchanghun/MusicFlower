@@ -16,6 +16,7 @@ public class CreateNote : MonoBehaviour
 
     void Start()
     {
+        print("스크립트 적용되었는지 확인용 코드");
         createTimeCounte = createTime;
         CreateNoteSet(noteCountNum, noteTypeNum);
     }

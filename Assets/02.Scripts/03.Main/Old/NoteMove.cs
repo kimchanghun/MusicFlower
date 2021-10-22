@@ -5,7 +5,7 @@ using DG.Tweening;
 
 public class NoteMove : MonoBehaviour
 {
-    [SerializeField]
+    //[SerializeField]
     Transform dest;
 
     [SerializeField]
@@ -20,7 +20,8 @@ public class NoteMove : MonoBehaviour
 
     void Start()
     {
-        //dest.transform.pos = new Vector3(0, -95, 0);
+        print("스크립트 적용되었는지 확인용 코드");
+        dest.transform.position = new Vector3(0, -95, 0);
         noteNum = transform.childCount;
 
         if (noteNum == 2)

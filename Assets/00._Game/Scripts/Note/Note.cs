@@ -43,12 +43,12 @@ namespace MF.Game
             Bar_1.transform
                 .DOMove(Points.Instance.DestinationPosition, DurationToDestination)
                 .SetEase(Ease.Linear)
-                .OnComplete(() => DestroyNote());
+                .OnComplete(() => DestroyNote(0));
 
             Bar_2.transform
                 .DOMove(Points.Instance.DestinationPosition, DurationToDestination)
                 .SetEase(Ease.Linear)
-                .OnComplete(() => DestroyNote());
+                .OnComplete(() => DestroyNote(1));
         }
 
         public void SetDifficult(float difficult)
@@ -66,12 +66,20 @@ namespace MF.Game
             Age += Time.deltaTime;  //1f 1초
         }
 
-        void DestroyNote()
+        //수정 -> SoundPlay 스크립트 생성
+        void DestroyNote(int a)
         {
             if(gameObject != null)
             {
                 Destroy(gameObject);
-            }            
+            }
+            
+            if(a == 0)
+            {
+                Color barColor = Bar_1.GetComponent<SpriteRenderer>().color;
+                GameObject.Find("GameManager").GetComponent<SoundPlay>()
+                    .SoundPlayWork(barColor, 0);
+            }
         }
     } 
 }
