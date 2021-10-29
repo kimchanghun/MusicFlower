@@ -12,7 +12,7 @@ namespace MF.Game
         AB = A | B,
         BC = B | C,
         AC = A | C,
-        ABC = A | B | C
+        ABC = A | B | C,
     }
 
     // | => OR ¿¬»ê(+)

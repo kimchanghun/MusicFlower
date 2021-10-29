@@ -20,8 +20,8 @@ namespace MF.Game
         List<NoteColor> noteColors;
 
         public Color GetNoteColor(NoteTypes noteType)
-        {            
-            NoteColor noteColor = noteColors.FirstOrDefault(noteColor => noteColor.noteType == noteType);
+        {
+            NoteColor noteColor = noteColors.FirstOrDefault(noteColor => (noteColor.noteType & NoteTypes.ABC) == noteType);
 
             return noteColor.color;
         }

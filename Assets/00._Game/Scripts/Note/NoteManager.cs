@@ -49,7 +49,7 @@ namespace MF.Game
                 }
                 else
                 {
-                    Debug.Log("실패!!! 시간 안맞음");
+                    Debug.Log($"실패!!! 시간 안맞음");
                 }
 
                 currentNote.DestroyNote();
@@ -76,11 +76,20 @@ namespace MF.Game
                 
                 if(noteType != NoteTypes.None)
                 {
+                    Debug.Log($"CreateNote {noteType}");
                     CreateNote(noteType);
                 }               
 
                 yield return new WaitForSeconds(selectedEntity.term);
             }            
+        }
+
+        private void Update()
+        {
+            if (currentNote == null && noteQueue.Count > 0)
+            {
+                currentNote = noteQueue.Dequeue();
+            }
         }
 
         //노트생성
@@ -94,25 +103,11 @@ namespace MF.Game
             note.SetDifficult(selectedEntity.difficult);
 
             noteQueue.Enqueue(note); 
-            if(currentNote == null)
-            {
-                currentNote = noteQueue.Dequeue();
-                //Debug.Log("CurrentNote : " + currentNote?.NoteType ?? "null");
-            }
         }
 
         public void DeathNote(Note note)
         {
-            if(noteQueue.Count > 0)
-            {
-                currentNote = noteQueue.Dequeue();
-                //Debug.Log("CurrentNote : " + currentNote?.NoteType ?? "null");
-            }
-            else
-            {
-                currentNote = null;
-                //Debug.Log("CurrentNote : " + currentNote?.NoteType ?? "null");
-            }            
+            currentNote = null;
         }
     } 
 }

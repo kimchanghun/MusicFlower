@@ -31,9 +31,6 @@ namespace MF.Game
 
         [SerializeField]
         GameObject Bar_2;
-        
-        Sequence bar1anim;
-        Sequence bar2anim;
 
         // Start is called before the first frame update
         void Start()
@@ -43,20 +40,15 @@ namespace MF.Game
             Bar_2.transform.position = Points.Instance.SpawnPosition_2;
 
             //'바'들을 이동시킴
-            bar1anim = DOTween.Sequence();
-            Tween bar1Tween = Bar_1.transform
+            Bar_1.transform
                 .DOMove(Points.Instance.DestinationPosition, DurationToDestination)
-                .SetEase(Ease.Linear);
+                .SetEase(Ease.Linear)
+                .OnComplete(() => DestroyNote(0));
 
-            bar1anim.Append(bar1Tween);
-
-            bar2anim = DOTween.Sequence();
-            Tween bar2Tween = Bar_2.transform
+            Bar_2.transform
                 .DOMove(Points.Instance.DestinationPosition, DurationToDestination)
-                .SetEase(Ease.Linear);
-
-            bar2anim.Append(bar2Tween);
-            bar2anim.Append(DOVirtual.DelayedCall(0.2f, DestroyNote));            
+                .SetEase(Ease.Linear)
+                .OnComplete(() => DestroyNote(1));
         }
 
         public void SetDifficult(float difficult)
@@ -74,26 +66,20 @@ namespace MF.Game
             Age += Time.deltaTime;  //1f 1초
         }
 
-        public void DestroyNote()
+        //수정 -> SoundPlay 스크립트 생성
+        void DestroyNote(int a)
         {
-            NoteManager.Instance.DeathNote(this);
-
-            bar1anim.Kill();
-            bar2anim.Kill();
-
-            //노트가 사라지는 애니메이션 연출
-            Bar_1.transform.DOScale(1.5f, 0.2f);
-            Bar_2.transform.DOScale(1.5f, 0.2f);
-
-            Bar_1.GetComponent<SpriteRenderer>().DOFade(0f, 0.2f);
-            Bar_2.GetComponent<SpriteRenderer>().DOFade(0f, 0.2f)
-                .OnComplete(() =>
-                {
-                    if (gameObject != null)
-                    {
-                        Destroy(gameObject);                        
-                    }
-                });
+            if(gameObject != null)
+            {
+                Destroy(gameObject);
+            }
+            
+            if(a == 0)
+            {
+                Color barColor = Bar_1.GetComponent<SpriteRenderer>().color;
+                GameObject.Find("GameManager").GetComponent<SoundPlay>()
+                    .SoundPlayWork(barColor, 0);
+            }
         }
     } 
 }
