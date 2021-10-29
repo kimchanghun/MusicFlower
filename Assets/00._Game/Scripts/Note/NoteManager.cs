@@ -52,7 +52,7 @@ namespace MF.Game
                     Debug.Log($"실패!!! 시간 안맞음");
                 }
 
-                currentNote.DestroyNote();
+                currentNote.DestroyNote(0);
             }
 
         }

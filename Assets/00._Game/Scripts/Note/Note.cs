@@ -67,7 +67,7 @@ namespace MF.Game
         }
 
         //수정 -> SoundPlay 스크립트 생성
-        void DestroyNote(int a)
+        public void DestroyNote(int a)
         {
             if(gameObject != null)
             {
