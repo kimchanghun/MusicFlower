@@ -15,15 +15,22 @@ MonoBehaviour:
   noteColors:
   - noteType: 1
     color: {r: 0.99607843, g: 0.18039216, b: 0.18039216, a: 1}
+    sound: {fileID: 8300000, guid: 58439f242c2fb704ca11c591c7a3d845, type: 3}
   - noteType: 2
     color: {r: 1, g: 1, b: 0, a: 1}
+    sound: {fileID: 8300000, guid: c742222e854d1694c8d3a4233dd39c58, type: 3}
   - noteType: 4
     color: {r: 0.18039216, g: 0.6039216, b: 0.99607843, a: 1}
+    sound: {fileID: 8300000, guid: 129e418061671dc4bb4ffac1de81428e, type: 3}
   - noteType: 3
     color: {r: 0.50980395, g: 0.98039216, b: 0.34509805, a: 1}
+    sound: {fileID: 8300000, guid: 26e157a9bc37d674fb49442a3f59ba85, type: 3}
   - noteType: 6
     color: {r: 0.98039216, g: 0.8, b: 0.18039216, a: 1}
+    sound: {fileID: 8300000, guid: a016c4837fd666b4d8a7750d69b81596, type: 3}
   - noteType: 5
     color: {r: 0.8, g: 0.18039216, b: 0.98039216, a: 1}
+    sound: {fileID: 8300000, guid: cf6db73c53b210946b792f64a0439efd, type: 3}
   - noteType: -1
     color: {r: 1, g: 1, b: 1, a: 1}
+    sound: {fileID: 8300000, guid: 91ee9925d4088134cb8d72197e0130df, type: 3}

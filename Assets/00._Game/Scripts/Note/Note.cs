@@ -56,7 +56,7 @@ namespace MF.Game
                 .SetEase(Ease.Linear);
 
             bar2anim.Append(bar2Tween);
-            bar2anim.Append(DOVirtual.DelayedCall(0.2f, DestroyNote));            
+            bar2anim.Append(DOVirtual.DelayedCall(0.2f, () => DestroyNote(false)));            
         }
 
         public void SetDifficult(float difficult)
@@ -74,26 +74,46 @@ namespace MF.Game
             Age += Time.deltaTime;  //1f 1초
         }
 
-        public void DestroyNote()
+        public void DestroyNote(bool success)
         {
-            NoteManager.Instance.DeathNote(this);
+            NoteManager.Instance.DeathNote(this, success);
 
             bar1anim.Kill();
             bar2anim.Kill();
 
             //노트가 사라지는 애니메이션 연출
-            Bar_1.transform.DOScale(1.5f, 0.2f);
-            Bar_2.transform.DOScale(1.5f, 0.2f);
+            if (success)
+            {
+                Bar_1.transform.DOScale(1.5f, 0.2f);
+                Bar_2.transform.DOScale(1.5f, 0.2f);
 
-            Bar_1.GetComponent<SpriteRenderer>().DOFade(0f, 0.2f);
-            Bar_2.GetComponent<SpriteRenderer>().DOFade(0f, 0.2f)
-                .OnComplete(() =>
-                {
-                    if (gameObject != null)
+                Bar_1.GetComponent<SpriteRenderer>().DOFade(0f, 0.2f);
+                Bar_2.GetComponent<SpriteRenderer>().DOFade(0f, 0.2f)
+                    .OnComplete(() =>
                     {
-                        Destroy(gameObject);                        
-                    }
-                });
+                        if (gameObject != null)
+                        {
+                            Destroy(gameObject);
+                        }
+                    });
+            }
+            else
+            {
+                Bar_1.transform.DOMoveY(-1.5f, 0.2f).SetRelative();
+                Bar_2.transform.DOMoveY(-1.5f, 0.2f).SetRelative();
+
+                Bar_1.GetComponent<SpriteRenderer>().DOFade(0f, 0.2f);
+                Bar_2.GetComponent<SpriteRenderer>().DOFade(0f, 0.2f)
+                    .OnComplete(() =>
+                    {
+                        if (gameObject != null)
+                        {
+                            Destroy(gameObject);
+                        }
+                    });
+            }
+            
+
         }
     } 
 }

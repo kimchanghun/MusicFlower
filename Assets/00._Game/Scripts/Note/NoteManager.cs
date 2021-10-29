@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace MF.Game
 {
@@ -11,6 +12,16 @@ namespace MF.Game
     /// </summary>
     public class NoteManager : Singleton<NoteManager>
     {
+        public enum GameResults
+        {
+            Condition_A,    //매우 만족
+            Condition_B,    //만족
+            Fail            //실망
+        }
+
+        public class SuccessEvent : UnityEvent<bool> { }
+        public class GameoverEvent : UnityEvent<GameResults> { }
+
         GameDataEntity selectedEntity;
 
         [SerializeField]
@@ -18,6 +29,18 @@ namespace MF.Game
 
         Note currentNote = null;
         Queue<Note> noteQueue = new Queue<Note>();
+
+        int successCount = 0;
+        public int SuccessCount => successCount;
+
+        GameResults gameResult = GameResults.Fail;
+        public GameResults GameResult => gameResult;
+
+        bool noteSequenceOver = false;
+        bool gameOver = false;
+
+        public SuccessEvent successEvent = new SuccessEvent();
+        public GameoverEvent gameoverEvent = new GameoverEvent();
 
         private void Start()
         {
@@ -28,19 +51,31 @@ namespace MF.Game
 
             //인풋 이벤트 구독
             InputManager.Instance.inputEvent.AddListener(InputHandler);
+
+            successCount = 0;
+            noteSequenceOver = false;
+            gameOver = false;
         }
 
         void InputHandler(NoteTypes noteTypes)
         {
             Debug.Log("Key입력 : " + noteTypes);
 
-            if(currentNote != null)
+            //소리
+            AudioClip clip = GameManager.Instance.Properties.GetNoteAudio(noteTypes);
+            AudioSource.PlayClipAtPoint(clip, Camera.main.transform.position);
+
+            if (currentNote != null)
             {
                 if (currentNote.Age >= 1.9f && currentNote.Age <= 2.1f)
                 {
                     if (currentNote.NoteType == noteTypes)
                     {
                         Debug.Log($"성공!!! 키입력 {noteTypes} 노트 {currentNote.NoteType}");
+                        successCount++;
+                        currentNote.DestroyNote(true);
+
+                        return;
                     }
                     else
                     {
@@ -50,11 +85,11 @@ namespace MF.Game
                 else
                 {
                     Debug.Log("실패!!! 시간 안맞음");
-                }
+                }                
 
-                currentNote.DestroyNote();
+                currentNote.DestroyNote(false);
+                
             }
-
         }
 
         // 동기 함수, 비동기 함수
@@ -80,7 +115,9 @@ namespace MF.Game
                 }               
 
                 yield return new WaitForSeconds(selectedEntity.term);
-            }            
+            }
+
+            noteSequenceOver = true;
         }
 
         //노트생성
@@ -94,25 +131,50 @@ namespace MF.Game
             note.SetDifficult(selectedEntity.difficult);
 
             noteQueue.Enqueue(note); 
+        }
+
+        private void Update()
+        {
+            if (gameOver)
+                return;
+
             if(currentNote == null)
             {
-                currentNote = noteQueue.Dequeue();
-                //Debug.Log("CurrentNote : " + currentNote?.NoteType ?? "null");
+                if(noteQueue.Count > 0)
+                {
+                    currentNote = noteQueue.Dequeue();
+                }
+            }
+
+            //노트를 다 만들었고, 노트 큐도 비어있고, 현재 노트도 죽었을때(null).. 모든 노트는 끝!            
+            if (noteSequenceOver && noteQueue.Count == 0 && currentNote == null)    
+            {
+                gameOver = true;
+                GameOver();
             }
         }
 
-        public void DeathNote(Note note)
+        void GameOver()
         {
-            if(noteQueue.Count > 0)
+            Debug.Log($"게임 끝!!! 노트 성공 개수 : {successCount}");
+
+            GameResults result = GameResults.Fail;
+            if(successCount >= selectedEntity.condition_1)
             {
-                currentNote = noteQueue.Dequeue();
-                //Debug.Log("CurrentNote : " + currentNote?.NoteType ?? "null");
+                result = GameResults.Condition_A;
             }
-            else
+            else if(successCount >= selectedEntity.condition_2)
             {
-                currentNote = null;
-                //Debug.Log("CurrentNote : " + currentNote?.NoteType ?? "null");
-            }            
+                result = GameResults.Condition_B;
+            }
+
+            gameoverEvent.Invoke(result);
+        }
+
+        public void DeathNote(Note note, bool success)
+        {
+            successEvent.Invoke(success);
+            currentNote = null;
         }
     } 
 }

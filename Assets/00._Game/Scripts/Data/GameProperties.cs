@@ -7,23 +7,31 @@ using System.Linq;
 namespace MF.Game
 {
     [Serializable]
-    public struct NoteColor
+    public struct NoteData
     {
         public NoteTypes noteType;  //노트타입
         public Color color;         //노트타입에 대한 컬러
+        public AudioClip sound;     //노트의 사운드
     }
 
     [CreateAssetMenu(fileName ="창훈이게임데이터", menuName = "창훈/게임데이터")]  
     public class GameProperties : ScriptableObject
     {
         [SerializeField]
-        List<NoteColor> noteColors;
+        List<NoteData> noteColors;
 
         public Color GetNoteColor(NoteTypes noteType)
         {            
-            NoteColor noteColor = noteColors.FirstOrDefault(noteColor => noteColor.noteType == noteType);
+            NoteData noteColor = noteColors.FirstOrDefault(noteColor => (noteColor.noteType & NoteTypes.ABC) == noteType);
 
             return noteColor.color;
+        }
+
+        public AudioClip GetNoteAudio(NoteTypes noteType)
+        {
+            NoteData noteColor = noteColors.FirstOrDefault(noteColor => (noteColor.noteType & NoteTypes.ABC) == noteType);
+
+            return noteColor.sound;
         }
     }
 }
